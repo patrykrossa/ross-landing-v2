@@ -6,9 +6,6 @@ import { projects } from '@/utils/consts';
 export default function ProjectArchive() {
 	const homeProjects = projects.slice(0, 4);
 
-	console.log('Home Projects:', homeProjects);
-	console.log('All Projects:', projects);
-
 	const getItemClasses = (index: number, totalLength: number) => {
 		const remainder = totalLength % 4;
 		const isLastGroup = index >= totalLength - remainder;
