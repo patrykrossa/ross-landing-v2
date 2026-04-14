@@ -1,11 +1,24 @@
 'use client';
-import { useState } from 'react';
-import Link from 'next/link';
-import { Menu, X, ChevronRight } from 'lucide-react';
+
 import Button from '@/components/ui/Button';
+import { ChevronRight, Menu, X } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 
 export default function Navbar() {
+	const pathname = usePathname();
 	const [isOpen, setIsOpen] = useState(false);
+
+	const getLinkClassName = (href: string) => {
+		const baseClasses = 'transition pb-1 tracking-widest uppercase';
+
+		const isActive = pathname === href;
+
+		return isActive
+			? `${baseClasses} text-brand border-b border-brand`
+			: `${baseClasses} text-white/70 hover:text-white`;
+	};
 
 	return (
 		<>
@@ -22,16 +35,18 @@ export default function Navbar() {
 
 					{/* DESKTOP MENU */}
 					<nav className='hidden lg:flex gap-8 text-xs font-bold tracking-widest text-white/70'>
-						<Link href='/' className='text-brand border-b border-brand pb-1'>
+						<Link href='/' className={getLinkClassName('/')}>
 							STRONA GŁÓWNA
 						</Link>
-						<Link href='/oferta' className='hover:text-white transition'>
+						<Link href='/oferta' className={getLinkClassName('/oferta')}>
 							OFERTA
 						</Link>
-						<Link href='/realizacje' className='hover:text-white transition'>
+						<Link
+							href='/realizacje'
+							className={getLinkClassName('/realizacje')}>
 							REALIZACJE
 						</Link>
-						<a href='#kontakt' className='hover:text-white transition'>
+						<a href='#kontakt' className={getLinkClassName('#kontakt')}>
 							KONTAKT
 						</a>
 					</nav>
