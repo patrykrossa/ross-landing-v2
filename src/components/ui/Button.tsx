@@ -1,9 +1,12 @@
+import { Type } from 'lucide-react';
 import { ReactNode } from 'react';
 
 interface ButtonProps {
 	children: ReactNode;
 	variant?: 'primary' | 'outline';
 	className?: string;
+	disabled?: boolean;
+	type?: 'button' | 'submit' | 'reset';
 	onClick?: () => void;
 }
 
@@ -11,6 +14,8 @@ export default function Button({
 	children,
 	variant = 'primary',
 	className = '',
+	disabled = false,
+	type = 'button',
 	onClick,
 }: ButtonProps) {
 	const baseStyles =
@@ -26,6 +31,8 @@ export default function Button({
 	return (
 		<button
 			onClick={onClick}
+			disabled={disabled}
+			type={type}
 			className={`${baseStyles} ${variants[variant]} ${className}`}>
 			{children}
 		</button>

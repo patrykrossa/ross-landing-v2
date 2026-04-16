@@ -8,7 +8,7 @@ import Button from '../ui/Button';
 import ServiceTile from '../ui/ServiceTile';
 
 export default function OfferPreview() {
-	const [emblaRef] = useEmblaCarousel({ loop: true, align: 'start' }, []);
+	const [emblaRef] = useEmblaCarousel({ loop: true, dragFree: true }, []);
 
 	return (
 		<section className='py-24 overflow-hidden relative'>
@@ -38,7 +38,7 @@ export default function OfferPreview() {
 						{services.map((service, index) => (
 							<div
 								key={index}
-								className='flex-[0_0_85%] md:flex-[0_0_35%] lg:flex-[0_0_25%] min-w-0 pr-6'>
+								className='cursor-grab flex-[0_0_85%] md:flex-[0_0_35%] lg:flex-[0_0_25%] min-w-0 pr-6'>
 								<ServiceTile
 									title={service.title}
 									description={service.description}
