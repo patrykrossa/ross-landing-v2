@@ -82,8 +82,8 @@ export default function Navbar() {
 					</nav>
 
 					<Link href='/kontakt' className='hidden lg:block'>
-						<Button variant='primary' className='px-5 py-2.5 text-xs'>
-							ZAPYTAJ O WYCENĘ <ChevronRight size={14} strokeWidth={3} />
+						<Button variant='primary' size='sm'>
+							ZAPYTAJ O WYCENĘ <ChevronRight size={12} strokeWidth={3} />
 						</Button>
 					</Link>
 
