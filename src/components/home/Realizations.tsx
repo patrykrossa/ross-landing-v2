@@ -2,6 +2,7 @@ import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import Button from '../ui/Button';
 import { projects } from '@/utils/consts';
+import { home } from '@/content/site';
 
 export default function ProjectArchive() {
 	const homeProjects = projects.slice(0, 4);
@@ -42,18 +43,19 @@ export default function ProjectArchive() {
 		<section id='realizacje' className='py-24 overflow-hidden'>
 			<div className='container mx-auto px-6'>
 				<div className='flex flex-col md:flex-row justify-between md:items-end mb-12 gap-6'>
-					<div>
-						<p className='text-brand uppercase font-bold tracking-widest mb-4 text-sm'>
-							Realizacje
-						</p>
-						<h2 className='text-4xl md:text-5xl font-black '>
-							Nasze <span className='text-brand'>REALIZACJE</span>
-						</h2>
-					</div>
+					<div className='max-w-2xl'>
+							<p className='text-brand uppercase font-bold tracking-widest mb-4 text-sm'>
+								{home.realizations.eyebrow}
+							</p>
+							<h2 className='text-4xl md:text-5xl font-black mb-4'>
+								{home.realizations.title}
+							</h2>
+							<p className='text-gray-400 text-lg'>{home.realizations.text}</p>
+						</div>
 
-					<Link href='/realizacje' className='shrink-0'>
+						<Link href='/realizacje' className='shrink-0'>
 						<Button variant='outline' className='px-6 py-3'>
-							ZOBACZ WSZYSTKIE REALIZACJE <ChevronRight size={16} />
+							{home.realizations.button} <ChevronRight size={16} />
 						</Button>
 					</Link>
 				</div>

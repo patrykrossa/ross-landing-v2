@@ -5,8 +5,24 @@ export async function POST(request: NextRequest) {
 	try {
 		const body = await request.json();
 		const { name, email, subject, message } = body;
+		const optional = (v: unknown) =>
+			typeof v === 'string' ? v.trim().slice(0, 200) : '';
+		const phone = optional(body.phone);
+		const date = optional(body.date);
+		const city = optional(body.city);
+		const eventType = optional(body.eventType);
+		const participants = optional(body.participants);
 
-		if (!name || !email || !subject || !message) {
+		if (
+			typeof name !== 'string' ||
+			typeof email !== 'string' ||
+			typeof subject !== 'string' ||
+			typeof message !== 'string' ||
+			!name ||
+			!email ||
+			!subject ||
+			!message
+		) {
 			return NextResponse.json(
 				{ error: 'Invalid request data' },
 				{ status: 400 }
@@ -45,9 +61,14 @@ export async function POST(request: NextRequest) {
 					<h2 style="color: #333;">Nowa wiadomość z formularza kontaktowego</h2>
 					<p><strong>Imię i Nazwisko:</strong> ${escapeHtml(name)}</p>
 					<p><strong>Email:</strong> ${escapeHtml(email)}</p>
-					<p><strong>Temat:</strong> ${escapeHtml(subject)}</p>
+					${phone ? `<p><strong>Telefon:</strong> ${escapeHtml(phone)}</p>` : ''}
+					<p><strong>Zakres usług:</strong> ${escapeHtml(subject)}</p>
+					${eventType ? `<p><strong>Rodzaj wydarzenia:</strong> ${escapeHtml(eventType)}</p>` : ''}
+					${date ? `<p><strong>Termin:</strong> ${escapeHtml(date)}</p>` : ''}
+					${city ? `<p><strong>Lokalizacja:</strong> ${escapeHtml(city)}</p>` : ''}
+					${participants ? `<p><strong>Liczba uczestników:</strong> ${escapeHtml(participants)}</p>` : ''}
 					<div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px; margin-top: 15px;">
-						<strong>Wiadomość:</strong>
+						<strong>Dodatkowe informacje:</strong>
 						<p style="white-space: pre-wrap;">${escapeHtml(message)}</p>
 					</div>
 					<hr style="margin-top: 20px; border: none; border-top: 1px solid #ddd;">

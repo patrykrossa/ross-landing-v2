@@ -36,3 +36,129 @@ body {
 	color: var(--foreground);
 	font-family: Arial, Helvetica, sans-serif;
 }
+
+/* ---------- Efekty wizualne ---------- */
+
+/* nagłówek odsłaniany słowo po słowie (SplitWords) */
+.word {
+	display: inline-block;
+	opacity: 0;
+	transform: translateY(0.5em);
+	animation: word-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+	animation-delay: calc(var(--i) * 90ms + 150ms);
+}
+
+@keyframes word-in {
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+@keyframes float {
+	0%,
+	100% {
+		transform: translate3d(0, 0, 0) scale(1);
+	}
+	50% {
+		transform: translate3d(40px, -30px, 0) scale(1.08);
+	}
+}
+
+.animate-float {
+	animation: float 16s ease-in-out infinite;
+}
+
+@keyframes scroll-hint {
+	0%,
+	100% {
+		transform: translateY(0);
+		opacity: 0.4;
+	}
+	50% {
+		transform: translateY(8px);
+		opacity: 1;
+	}
+}
+
+.animate-scroll-hint {
+	animation: scroll-hint 2s ease-in-out infinite;
+}
+
+/* siatka w tle sekcji */
+.bg-grid {
+	background-image:
+		linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+		linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+	background-size: 56px 56px;
+	mask-image: radial-gradient(ellipse at center, black 25%, transparent 75%);
+}
+
+/* tekst tylko z konturem (numery kafelków) */
+.text-outline {
+	color: transparent;
+	-webkit-text-stroke: 1px rgba(255, 255, 255, 0.35);
+}
+
+/* opis kafelka bento: na urządzeniach z myszką pojawia się po najechaniu,
+   na dotyku jest widoczny od razu */
+@media (hover: hover) and (pointer: fine) {
+	.bento-desc {
+		opacity: 0;
+		transform: translateY(12px);
+		max-height: 0;
+		margin-top: 0;
+		transition:
+			opacity 0.4s ease,
+			transform 0.4s ease,
+			max-height 0.4s ease,
+			margin-top 0.4s ease;
+	}
+	.group:hover .bento-desc,
+	.group:focus-visible .bento-desc {
+		opacity: 1;
+		transform: none;
+		max-height: 8rem;
+		margin-top: 0.5rem;
+	}
+}
+
+/* połysk na głównym przycisku */
+.btn-shine {
+	position: relative;
+	overflow: hidden;
+	isolation: isolate;
+}
+.btn-shine::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	transform: translateX(-120%) skewX(-20deg);
+	background: linear-gradient(
+		90deg,
+		transparent,
+		rgba(255, 255, 255, 0.45),
+		transparent
+	);
+	transition: transform 0.8s ease;
+}
+.btn-shine:hover::before {
+	transform: translateX(120%) skewX(-20deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.word,
+	.animate-float,
+	.animate-scroll-hint,
+	.animate-marquee {
+		animation: none;
+	}
+	.word {
+		opacity: 1;
+		transform: none;
+	}
+	.btn-shine::before {
+		transition: none;
+	}
+}

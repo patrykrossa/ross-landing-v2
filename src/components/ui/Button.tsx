@@ -1,4 +1,3 @@
-import { Type } from 'lucide-react';
 import { ReactNode } from 'react';
 
 interface ButtonProps {
@@ -19,11 +18,11 @@ export default function Button({
 	onClick,
 }: ButtonProps) {
 	const baseStyles =
-		'cursor-pointer px-8 py-4 rounded-md font-bold transition-all flex items-center justify-center gap-2 uppercase text-sm tracking-wider';
+		'cursor-pointer px-8 py-4 rounded-md font-bold transition-all duration-300 flex items-center justify-center gap-2 uppercase text-sm tracking-wider hover:-translate-y-0.5 active:translate-y-0';
 
 	const variants = {
 		primary:
-			'bg-brand text-black hover:bg-brand/90 border-2 border-transparent',
+			'btn-shine bg-brand text-black hover:bg-brand/90 hover:shadow-[0_8px_30px_-8px_rgba(117,192,67,0.7)] border-2 border-transparent',
 
 		outline: 'border-2 border-white text-white hover:bg-white hover:text-black',
 	};

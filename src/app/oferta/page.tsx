@@ -1,89 +1,53 @@
-import Hero from '@/components/oferta/Hero';
-import OfferSection from '@/components/oferta/Section';
-import {
-	Speaker,
-	Lightbulb,
-	Layers,
-	Tent,
-	Sofa,
-	Truck,
-	Palette,
-	PenTool,
-	MonitorPlay,
-	Clapperboard,
-} from 'lucide-react';
+import Contact from '@/components/layout/contact';
+import PageHero from '@/components/ui/PageHero';
+import BentoGrid from '@/components/ui/BentoGrid';
+import ServiceTile from '@/components/ui/ServiceTile';
+import { BENTO_TILES } from '@/content/featureFlags';
+import { services } from '@/content/services';
+import { offerPage } from '@/content/site';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+	title: { absolute: offerPage.metaTitle },
+	description: offerPage.metaDescription,
+	alternates: { canonical: '/oferta' },
+};
 
 export default function OfertaPage() {
 	return (
 		<main className='bg-black min-h-screen'>
-			<Hero />
-
-			<OfferSection
-				title='Technika i Sprzęt'
-				imageSrc='https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=1000&auto=format&fit=crop'
-				imageBadge='Technika'
-				imagePosition='left'
-				features={[
-					{
-						icon: <Speaker size={24} />,
-						title: 'Systemy Audio',
-						description:
-							'Koncertowe nagłośnienie L-Acoustics oraz systemy bezprzewodowe Shure.',
-					},
-					{
-						icon: <Lightbulb size={24} />,
-						title: 'Oświetlenie Sceniczne',
-						description:
-							'Inteligentne głowice ruchome, efekty laserowe i sterowniki MA Lighting.',
-					},
-					{
-						icon: <Layers size={24} />,
-						title: 'Konstrukcje i Sceny',
-						description:
-							'Aluminiowe systemy kratownicowe, podesty i zadaszenia Prolyte.',
-					},
-				]}
+			<PageHero
+				eyebrow={offerPage.eyebrow}
+				h1={offerPage.h1}
+				text={offerPage.text}
+				image='https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070&auto=format&fit=crop'
+				imageAlt='Oprawa sceniczna wydarzenia: światło, scena i publiczność'
+				cta={{ label: 'Zapytaj o wycenę', href: '/kontakt' }}
 			/>
 
-			<OfferSection
-				title='Infrastruktura Eventowa'
-				imageSrc='https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=1000&auto=format&fit=crop'
-				imagePosition='right'
-				features={[
-					{
-						icon: <Tent size={24} />,
-						title: 'Namioty Premium',
-						description:
-							'Stylowe namioty typu Star, hale namiotowe i pawilony VIP.',
-					},
-					{
-						icon: <Sofa size={24} />,
-						title: 'Meble Eventowe',
-						description:
-							'Designerskie sofy, krzesła bankietowe i podświetlane stoły barowe.',
-					},
-					{
-						icon: <Truck size={24} />,
-						title: 'Logistyka',
-						description:
-							'Własny transport, agregaty prądotwórcze i zaplecze sanitarne.',
-					},
-				]}
-			/>
+			<section className='py-20'>
+				<div className='container mx-auto px-6'>
+					{BENTO_TILES ? (
+						<BentoGrid />
+					) : (
+						<ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+						{services.map((s) => (
+							<li key={s.slug}>
+								<ServiceTile
+									title={s.name}
+									description={s.tileText}
+									href={`/${s.slug}`}
+									buttonLabel={s.tileButton}
+									imageSrc={s.heroImage}
+								/>
+							</li>
+						))}
+					</ul>
+					)}
+				</div>
+			</section>
 
-			<OfferSection
-				imagePosition='left'
-				title='Produkcja i Kreacja'
-				description='Przekształcamy idee w zapadające w pamięć spektakle. Nasz zespół kreatywny czuwa nad każdym detalem scenografii.'
-				imageSrc='https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1000&auto=format&fit=crop'
-				mainIcon={<Palette size={32} />}
-				features={[
-					{ icon: <PenTool size={18} />, title: 'Concept Design' },
-					{ icon: <MonitorPlay size={18} />, title: 'Scenografia 3D' },
-					{ icon: <Layers size={18} />, title: 'Management' },
-					{ icon: <Clapperboard size={18} />, title: 'Reżyseria Eventu' },
-				]}
-			/>
+			<Contact />
 		</main>
 	);
 }
