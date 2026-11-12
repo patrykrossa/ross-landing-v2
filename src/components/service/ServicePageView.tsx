@@ -5,6 +5,8 @@ import Faq from '@/components/ui/Faq';
 import PageHero from '@/components/ui/PageHero';
 import { getService, type ServicePage } from '@/content/services';
 import { Check, ChevronRight } from 'lucide-react';
+import JsonLd from '@/components/seo/JsonLd';
+import { SITE_URL } from '@/content/site';
 import Link from 'next/link';
 
 export default function ServicePageView({ service }: { service: ServicePage }) {
@@ -12,8 +14,36 @@ export default function ServicePageView({ service }: { service: ServicePage }) {
 		.map((slug) => getService(slug))
 		.filter((s): s is ServicePage => Boolean(s));
 
+	const chips = service.blocks
+		.find((b) => b.items && b.items.length > 0)
+		?.items?.map((i) => i.title)
+		.slice(0, 5);
+
+	const url = `${SITE_URL}/${service.slug}`;
+	const serviceLd = {
+		'@context': 'https://schema.org',
+		'@type': 'Service',
+		name: service.name,
+		serviceType: service.name,
+		description: service.metaDescription,
+		url,
+		provider: { '@id': `${SITE_URL}/#organization` },
+		areaServed: { '@type': 'Country', name: 'Polska' },
+	};
+	const breadcrumbLd = {
+		'@context': 'https://schema.org',
+		'@type': 'BreadcrumbList',
+		itemListElement: [
+			{ '@type': 'ListItem', position: 1, name: 'Strona główna', item: SITE_URL },
+			{ '@type': 'ListItem', position: 2, name: 'Oferta', item: `${SITE_URL}/oferta` },
+			{ '@type': 'ListItem', position: 3, name: service.name, item: url },
+		],
+	};
+
 	return (
 		<main className='bg-black'>
+			<JsonLd data={serviceLd} />
+			<JsonLd data={breadcrumbLd} />
 			<PageHero
 				h1={service.h1}
 				tagline={service.tagline}
@@ -21,6 +51,7 @@ export default function ServicePageView({ service }: { service: ServicePage }) {
 				image={service.heroImage}
 				imageAlt={service.heroImageAlt}
 				cta={{ label: service.heroCta, href: '/kontakt' }}
+				chips={chips}
 			/>
 
 			{service.blocks.map((block, i) => {

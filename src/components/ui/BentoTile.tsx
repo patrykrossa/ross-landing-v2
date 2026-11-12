@@ -7,6 +7,7 @@ import {
 	useReducedMotion,
 } from 'motion/react';
 import { ArrowUpRight } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import type { MouseEvent, ReactNode } from 'react';
 
@@ -50,11 +51,21 @@ export default function BentoTile({
 			draggable={false}
 			className='group relative block h-full w-full overflow-hidden rounded-2xl bg-zinc-900 ring-1 ring-white/10 transition-shadow duration-500 hover:ring-brand/60 hover:shadow-[0_0_40px_-10px_rgba(117,192,67,0.45)] focus-visible:ring-2 focus-visible:ring-brand'>
 			<motion.div
-				className='absolute inset-0 bg-cover bg-center brightness-[0.65] saturate-[0.85] transition-[filter] duration-700 group-hover:brightness-90 group-hover:saturate-100'
-				style={{ backgroundImage: `url('${image}')` }}
+				className='absolute inset-0 brightness-[0.65] saturate-[0.85] transition-[filter] duration-700 group-hover:brightness-90 group-hover:saturate-100'
 				whileHover={reduce ? undefined : { scale: 1.08 }}
-				transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-			/>
+				transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}>
+				<Image
+					src={image}
+					alt=''
+					fill
+					sizes={
+						large
+							? '(min-width: 1024px) 50vw, 100vw'
+							: '(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw'
+					}
+					className='object-cover'
+				/>
+			</motion.div>
 			<div className='absolute inset-0 bg-linear-to-t from-black via-black/55 to-black/10' />
 			<motion.div
 				aria-hidden

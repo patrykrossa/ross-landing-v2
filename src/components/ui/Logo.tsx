@@ -1,17 +1,27 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
-// Tymczasowo logo tekstowe. Po dodaniu plików SVG do public/logos
-// wystarczy podmienić zawartość tego komponentu na <Image src='/logos/...' />.
-export default function Logo({ className = '' }: { className?: string }) {
+export default function Logo({
+	className = '',
+	imgClassName = 'h-11',
+}: {
+	className?: string;
+	imgClassName?: string;
+}) {
 	return (
 		<Link
 			href='/'
 			aria-label='ROSS Events — strona główna'
-			className={`flex items-center gap-1 ${className}`}>
-			<span className='text-2xl font-black italic'>
-				ROSS<span className='text-brand'>R</span>
-			</span>
-			<span className='text-[10px] tracking-[0.3em] uppercase mt-2'>events</span>
+			className={`inline-flex items-center ${className}`}>
+			<Image
+				src='/logos/ross-events-logo.svg'
+				alt='ROSS Events'
+				width={1326}
+				height={582}
+				priority
+				unoptimized
+				className={`w-auto transition-[height] duration-300 ${imgClassName}`}
+			/>
 		</Link>
 	);
 }

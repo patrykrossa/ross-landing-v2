@@ -8,15 +8,26 @@ export async function POST(request: NextRequest) {
 		const optional = (v: unknown) =>
 			typeof v === 'string' ? v.trim().slice(0, 200) : '';
 		const phone = optional(body.phone);
-		const date = optional(body.date);
+		const rawDate = optional(body.date);
+		const date = /^\d{4}-\d{2}-\d{2}$/.test(rawDate)
+			? rawDate.split('-').reverse().join('.')
+			: rawDate;
 		const city = optional(body.city);
 		const eventType = optional(body.eventType);
 		const participants = optional(body.participants);
+
+		if (body.consent !== true) {
+			return NextResponse.json({ error: 'Consent required' }, { status: 400 });
+		}
 
 		if (
 			typeof name !== 'string' ||
 			typeof email !== 'string' ||
 			typeof subject !== 'string' ||
+			subject.length > 500 ||
+			name.length > 200 ||
+			email.length > 200 ||
+			message.length > 5000 ||
 			typeof message !== 'string' ||
 			!name ||
 			!email ||

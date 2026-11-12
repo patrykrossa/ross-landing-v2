@@ -33,7 +33,7 @@ export default function Footer() {
 
 				<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16'>
 					<div>
-						<Logo className='mb-6' />
+						<Logo className='mb-6' imgClassName='h-14' />
 						<p className='text-gray-400 text-sm mb-6 max-w-xs leading-relaxed'>
 							{footerDescription}
 						</p>
@@ -134,6 +134,12 @@ export default function Footer() {
 
 				<div className='flex flex-col md:flex-row justify-center items-center pt-6 border-t border-white/10 text-xs text-gray-500'>
 					<p>© {currentYear} ROSS events. Wszelkie prawa zastrzeżone.</p>
+					<span className='hidden md:inline mx-3'>·</span>
+					<Link
+						href='/polityka-prywatnosci'
+						className='mt-2 md:mt-0 hover:text-white transition-colors'>
+						Polityka prywatności
+					</Link>
 				</div>
 			</div>
 		</footer>

@@ -17,7 +17,7 @@ export default function Hero() {
 					loop
 					muted
 					playsInline
-					poster='/images/home-hero-bg-poster.png'
+					poster='/images/home-hero-bg-poster.webp'
 					preload='metadata'
 					className='absolute inset-0 w-full h-full object-cover z-0'>
 					<source src='/videos/hero-bg.webm' type='video/webm' />

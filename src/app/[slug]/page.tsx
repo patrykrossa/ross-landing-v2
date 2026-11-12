@@ -27,6 +27,7 @@ export async function generateMetadata({
 			title: service.metaTitle,
 			description: service.metaDescription,
 			url: `/${service.slug}`,
+			images: [{ url: '/opengraph-image.png', width: 1200, height: 630 }],
 		},
 	};
 }

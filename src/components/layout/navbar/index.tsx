@@ -6,12 +6,21 @@ import { services } from '@/content/services';
 import { ChevronDown, ChevronRight, Menu, X } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { serviceIcons } from '@/components/ui/icons';
 
 export default function Navbar() {
 	const pathname = usePathname();
 	const [isOpen, setIsOpen] = useState(false);
 	const [offerOpen, setOfferOpen] = useState(false);
+	const [scrolled, setScrolled] = useState(false);
+
+	useEffect(() => {
+		const onScroll = () => setScrolled(window.scrollY > 24);
+		onScroll();
+		window.addEventListener('scroll', onScroll, { passive: true });
+		return () => window.removeEventListener('scroll', onScroll);
+	}, []);
 
 	const isActive = (href: string) => pathname === href;
 	const offerActive =
@@ -31,9 +40,14 @@ export default function Navbar() {
 
 	return (
 		<>
-			<header className='sticky top-0 w-full z-50 bg-black/80 backdrop-blur-md border-b border-white/5 py-4'>
+			<header
+				className={`sticky top-0 w-full z-50 backdrop-blur-md border-b transition-all duration-300 ${
+					scrolled
+						? 'bg-black/90 border-white/10 py-2 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.8)]'
+						: 'bg-black/80 border-white/5 py-4'
+				}`}>
 				<div className='container mx-auto px-6 flex items-center justify-between'>
-					<Logo />
+					<Logo imgClassName={scrolled ? 'h-9' : 'h-11'} />
 
 					{/* DESKTOP MENU */}
 					<nav className='hidden lg:flex items-center gap-8 text-xs font-bold tracking-widest text-white/70'>
@@ -47,22 +61,45 @@ export default function Navbar() {
 								className={`${getLinkClassName(offerActive)} inline-flex items-center gap-1`}>
 								OFERTA <ChevronDown size={14} />
 							</Link>
-							<div className='invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 transition-all absolute left-0 top-full pt-4'>
-								<ul className='w-72 rounded-lg border border-white/10 bg-zinc-950/95 backdrop-blur-md p-2 shadow-2xl'>
-									{services.map((s) => (
-										<li key={s.slug}>
-											<Link
-												href={`/${s.slug}`}
-												className={`block rounded px-4 py-2.5 normal-case tracking-normal text-sm font-medium ${
-													isActive(`/${s.slug}`)
-														? 'text-brand'
-														: 'text-white/80 hover:bg-white/5 hover:text-white'
-												}`}>
-												{s.name}
-											</Link>
-										</li>
-									))}
-								</ul>
+							<div className='invisible absolute left-1/2 top-full -translate-x-1/2 translate-y-2 pt-4 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100'>
+								<div className='w-170 rounded-2xl border border-white/10 bg-zinc-950/95 p-3 shadow-2xl backdrop-blur-md'>
+									<ul className='grid grid-cols-2 gap-1'>
+										{services.map((s) => {
+											const Icon = serviceIcons[s.slug];
+											return (
+												<li key={s.slug}>
+													<Link
+														href={`/${s.slug}`}
+														className={`group/item flex items-start gap-3 rounded-xl p-3 normal-case tracking-normal transition-colors ${
+															isActive(`/${s.slug}`)
+																? 'bg-white/5'
+																: 'hover:bg-white/5'
+														}`}>
+														{Icon && (
+															<span className='flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-black/60 text-brand ring-1 ring-white/10 transition-colors group-hover/item:bg-brand group-hover/item:text-black'>
+																<Icon size={20} />
+															</span>
+														)}
+														<span className='min-w-0'>
+															<span
+																className={`block text-sm font-bold ${isActive(`/${s.slug}`) ? 'text-brand' : 'text-white'}`}>
+																{s.name}
+															</span>
+															<span className='mt-0.5 line-clamp-2 block text-xs font-normal leading-snug text-gray-500'>
+																{s.tileText}
+															</span>
+														</span>
+													</Link>
+												</li>
+											);
+										})}
+									</ul>
+									<Link
+										href='/oferta'
+										className='mt-2 flex items-center justify-between rounded-xl border border-white/10 px-4 py-3 text-xs font-bold uppercase tracking-widest text-brand transition-colors hover:bg-white/5'>
+										Zobacz całą ofertę <ChevronRight size={14} strokeWidth={3} />
+									</Link>
+								</div>
 							</div>
 						</div>
 

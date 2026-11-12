@@ -1,9 +1,11 @@
 'use client';
 
+import Link from 'next/link';
 import Button from '@/components/ui/Button';
 import { services } from '@/content/services';
-import { Send } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { Check, Send } from 'lucide-react';
+import Image from 'next/image';
+import { useId, useRef, useState } from 'react';
 
 interface ContactProps {
 	eyebrow?: string;
@@ -41,6 +43,16 @@ export default function Contact({
 	const [submitted, setSubmitted] = useState(false);
 	const [error, setError] = useState(false);
 	const formRef = useRef<HTMLFormElement>(null);
+	const uid = useId();
+	const [selectedServices, setSelectedServices] = useState<string[]>(
+		defaultSubject ? [defaultSubject] : [],
+	);
+	const today = new Date().toISOString().slice(0, 10);
+
+	const toggleService = (name: string) =>
+		setSelectedServices((cur) =>
+			cur.includes(name) ? cur.filter((n) => n !== name) : [...cur, name],
+		);
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -60,14 +72,19 @@ export default function Contact({
 					city: formData.get('city'),
 					eventType: formData.get('eventType'),
 					participants: formData.get('participants'),
-					subject: formData.get('subject'),
+					subject:
+						selectedServices.length > 0
+							? selectedServices.join(', ')
+							: 'Nie wskazano zakresu usług',
 					message: formData.get('message'),
+					consent: formData.get('consent') === 'on',
 				}),
 			});
 
 			if (response.ok) {
 				setSubmitted(true);
 				formRef.current?.reset();
+				setSelectedServices([]);
 				setTimeout(() => setSubmitted(false), 8000);
 			} else {
 				setError(true);
@@ -86,9 +103,12 @@ export default function Contact({
 			className='relative py-24 overflow-hidden min-h-150 flex items-center scroll-mt-20'>
 			<div className='absolute inset-0 z-0'>
 				<div className='absolute inset-0 bg-black/70 md:bg-linear-to-r md:from-black md:via-black/60 md:to-black/40 z-10' />
-				<div
-					className="w-full h-full bg-[url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center"
-					aria-hidden='true'
+				<Image
+					src='https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070&auto=format&fit=crop'
+					alt=''
+					fill
+					sizes='100vw'
+					className='object-cover'
 				/>
 			</div>
 
@@ -130,8 +150,12 @@ export default function Contact({
 						<form ref={formRef} onSubmit={handleSubmit} className='space-y-5'>
 							<div className='grid md:grid-cols-2 gap-5'>
 								<div className='space-y-2'>
-									<label className={labelClass}>Imię i nazwisko / firma</label>
+									<label htmlFor={`${uid}-name`} className={labelClass}>
+										Imię i nazwisko / firma
+									</label>
 									<input
+										id={`${uid}-name`}
+										autoComplete='name'
 										type='text'
 										name='name'
 										required
@@ -141,8 +165,12 @@ export default function Contact({
 									/>
 								</div>
 								<div className='space-y-2'>
-									<label className={labelClass}>E-mail</label>
+									<label htmlFor={`${uid}-email`} className={labelClass}>
+										E-mail
+									</label>
 									<input
+										id={`${uid}-email`}
+										autoComplete='email'
 										type='email'
 										name='email'
 										required
@@ -155,8 +183,12 @@ export default function Contact({
 
 							<div className='grid md:grid-cols-2 gap-5'>
 								<div className='space-y-2'>
-									<label className={labelClass}>Telefon</label>
+									<label htmlFor={`${uid}-phone`} className={labelClass}>
+										Telefon
+									</label>
 									<input
+										id={`${uid}-phone`}
+										autoComplete='tel'
 										type='tel'
 										name='phone'
 										maxLength={40}
@@ -165,21 +197,27 @@ export default function Contact({
 									/>
 								</div>
 								<div className='space-y-2'>
-									<label className={labelClass}>Termin wydarzenia</label>
+									<label htmlFor={`${uid}-date`} className={labelClass}>
+										Termin wydarzenia
+									</label>
 									<input
-										type='text'
+										id={`${uid}-date`}
+										type='date'
 										name='date'
-										maxLength={80}
-										placeholder='np. 14.06.2027'
-										className={inputClass}
+										min={today}
+										className={`${inputClass} scheme-dark`}
 									/>
 								</div>
 							</div>
 
 							<div className='grid md:grid-cols-2 gap-5'>
 								<div className='space-y-2'>
-									<label className={labelClass}>Miasto / lokalizacja</label>
+									<label htmlFor={`${uid}-city`} className={labelClass}>
+										Miasto / lokalizacja
+									</label>
 									<input
+										id={`${uid}-city`}
+										autoComplete='address-level2'
 										type='text'
 										name='city'
 										maxLength={120}
@@ -188,8 +226,11 @@ export default function Contact({
 									/>
 								</div>
 								<div className='space-y-2'>
-									<label className={labelClass}>Liczba uczestników</label>
+									<label htmlFor={`${uid}-participants`} className={labelClass}>
+										Liczba uczestników
+									</label>
 									<input
+										id={`${uid}-participants`}
 										type='text'
 										name='participants'
 										maxLength={60}
@@ -199,46 +240,65 @@ export default function Contact({
 								</div>
 							</div>
 
-							<div className='grid md:grid-cols-2 gap-5'>
-								<div className='space-y-2'>
-									<label className={labelClass}>Rodzaj wydarzenia</label>
-									<select
-										name='eventType'
-										defaultValue={eventTypes[0]}
-										className={`${inputClass} appearance-none cursor-pointer`}>
-										{eventTypes.map((t) => (
-											<option key={t} className='bg-zinc-900' value={t}>
-												{t}
-											</option>
-										))}
-									</select>
-								</div>
-								<div className='space-y-2'>
-									<label className={labelClass}>Zakres usług</label>
-									<select
-										name='subject'
-										defaultValue={defaultSubject ?? 'Kompleksowa obsługa eventu'}
-										className={`${inputClass} appearance-none cursor-pointer`}>
-										<option
-											className='bg-zinc-900'
-											value='Kompleksowa obsługa eventu'>
-											Kompleksowa obsługa eventu
+							<div className='space-y-2'>
+								<label htmlFor={`${uid}-eventType`} className={labelClass}>
+									Rodzaj wydarzenia
+								</label>
+								<select
+									id={`${uid}-eventType`}
+									name='eventType'
+									defaultValue={eventTypes[0]}
+									className={`${inputClass} appearance-none cursor-pointer`}>
+									{eventTypes.map((t) => (
+										<option key={t} className='bg-zinc-900' value={t}>
+											{t}
 										</option>
-										{services.map((s) => (
-											<option key={s.slug} className='bg-zinc-900' value={s.name}>
-												{s.name}
-											</option>
-										))}
-										<option className='bg-zinc-900' value='Inne'>
-											Inne
-										</option>
-									</select>
-								</div>
+									))}
+								</select>
 							</div>
 
+							<fieldset className='space-y-3'>
+								<legend className={labelClass}>
+									Zakres usług{' '}
+									<span className='font-normal normal-case tracking-normal text-gray-500'>
+										(możesz zaznaczyć kilka)
+									</span>
+								</legend>
+								<div className='flex flex-wrap gap-2'>
+									{[
+										...services.map((s) => s.name),
+										'Kompleksowa obsługa eventu',
+										'Inne',
+									].map((name) => {
+										const checked = selectedServices.includes(name);
+										return (
+											<label
+												key={name}
+												className={`flex cursor-pointer items-center gap-1.5 rounded-full border px-3.5 py-2 text-xs font-semibold transition-all has-focus-visible:ring-2 has-focus-visible:ring-brand ${
+													checked
+														? 'border-brand bg-brand text-black'
+														: 'border-white/15 bg-white/5 text-white/70 hover:border-brand/60 hover:text-white'
+												}`}>
+												<input
+													type='checkbox'
+													className='sr-only'
+													checked={checked}
+													onChange={() => toggleService(name)}
+												/>
+												{checked && <Check size={14} strokeWidth={3} />}
+												{name}
+											</label>
+										);
+									})}
+								</div>
+							</fieldset>
+
 							<div className='space-y-2'>
-								<label className={labelClass}>Dodatkowe informacje</label>
+								<label htmlFor={`${uid}-message`} className={labelClass}>
+									Dodatkowe informacje
+								</label>
 								<textarea
+									id={`${uid}-message`}
 									name='message'
 									required
 									rows={4}
@@ -246,6 +306,29 @@ export default function Contact({
 									placeholder='Opisz krótko swoje wydarzenie, np. ramowy harmonogram lub wymagania z ridera technicznego...'
 									className={`${inputClass} resize-none`}
 								/>
+							</div>
+
+							<div className='flex items-start gap-3'>
+								<input
+									id={`${uid}-consent`}
+									type='checkbox'
+									name='consent'
+									required
+									className='mt-1 size-4 shrink-0 accent-brand'
+								/>
+								<label
+									htmlFor={`${uid}-consent`}
+									className='text-xs leading-relaxed text-gray-400'>
+									Zapoznałem/am się z{' '}
+									<Link
+										href='/polityka-prywatnosci'
+										target='_blank'
+										className='text-brand underline underline-offset-2'>
+										polityką prywatności
+									</Link>{' '}
+									i wyrażam zgodę na przetwarzanie moich danych osobowych w celu
+									odpowiedzi na zapytanie.
+								</label>
 							</div>
 
 							<Button

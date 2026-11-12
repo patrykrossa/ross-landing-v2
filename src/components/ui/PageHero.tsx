@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react';
 import { ChevronRight } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import Button from './Button';
 
@@ -13,6 +14,7 @@ interface PageHeroProps {
 	image: string;
 	imageAlt: string;
 	cta?: { label: string; href: string };
+	chips?: string[];
 }
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -25,6 +27,7 @@ export default function PageHero({
 	image,
 	imageAlt,
 	cta,
+	chips,
 }: PageHeroProps) {
 	const reduce = useReducedMotion();
 	const { scrollY } = useScroll();
@@ -40,12 +43,16 @@ export default function PageHero({
 		<section className='relative pt-32 pb-24 lg:pt-48 lg:pb-32 overflow-hidden border-b border-white/10'>
 			<div className='absolute inset-0 z-0'>
 				<div className='absolute inset-0 bg-linear-to-r from-black via-black/80 to-black/40 z-10' />
-				<motion.div
-					role='img'
-					aria-label={imageAlt}
-					className='absolute -inset-y-16 inset-x-0 bg-cover bg-center'
-					style={{ backgroundImage: `url('${image}')`, y: bgY }}
-				/>
+				<motion.div className='absolute -inset-y-16 inset-x-0' style={{ y: bgY }}>
+					<Image
+						src={image}
+						alt={imageAlt}
+						fill
+						priority
+						sizes='100vw'
+						className='object-cover'
+					/>
+				</motion.div>
 				<div
 					aria-hidden
 					className='animate-float absolute -left-24 top-1/3 z-10 h-80 w-80 rounded-full bg-brand/20 blur-[110px]'
@@ -80,8 +87,22 @@ export default function PageHero({
 							{text}
 						</motion.p>
 					)}
+					{chips && chips.length > 0 && (
+						<motion.ul
+							{...item(4)}
+							aria-label='Zakres usługi'
+							className='mt-8 flex flex-wrap gap-2'>
+							{chips.map((c) => (
+								<li
+									key={c}
+									className='rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-semibold text-white/80 backdrop-blur-sm'>
+									{c}
+								</li>
+							))}
+						</motion.ul>
+					)}
 					{cta && (
-						<motion.div {...item(4)} className='mt-10'>
+						<motion.div {...item(5)} className='mt-10'>
 							<Link href={cta.href} className='inline-block'>
 								<Button variant='primary'>
 									{cta.label} <ChevronRight size={18} />

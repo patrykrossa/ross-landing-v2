@@ -1,4 +1,5 @@
 import { ChevronRight } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 
 interface ServiceTileProps {
@@ -21,14 +22,17 @@ export default function ServiceTile({
 			href={href}
 			draggable={false}
 			className='group block relative h-100 w-full overflow-hidden rounded-lg bg-zinc-900'>
-			<div
-				className='absolute inset-0 z-0 transition-transform duration-700 group-hover:scale-110'
-				style={{
-					backgroundImage: imageSrc ? `url(${imageSrc})` : 'none',
-					backgroundSize: 'cover',
-					backgroundPosition: 'center',
-				}}
-			/>
+			<div className='absolute inset-0 z-0 transition-transform duration-700 group-hover:scale-110'>
+				{imageSrc && (
+					<Image
+						src={imageSrc}
+						alt=''
+						fill
+						sizes='(min-width: 1024px) 25vw, (min-width: 768px) 35vw, 85vw'
+						className='object-cover'
+					/>
+				)}
+			</div>
 
 			<div className='absolute inset-0 bg-linear-to-t from-black via-black/70 to-transparent z-10 transition-opacity duration-500 group-hover:opacity-90' />
 

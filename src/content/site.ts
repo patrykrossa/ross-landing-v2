@@ -9,6 +9,35 @@ export const contact = {
 	emailHref: 'mailto:contact@ross-events.pl',
 };
 
+// UZUPEŁNIJ danych administratora przed publikacją (wyświetlane w polityce prywatności).
+export const legal = {
+	companyName: 'ROSS Events [UZUPEŁNIJ: pełna nazwa firmy i forma prawna]',
+	address: '[UZUPEŁNIJ: adres siedziby]',
+	nip: '[UZUPEŁNIJ: NIP]',
+	updated: '12 listopada 2026',
+};
+
+export const organizationLd = {
+	'@context': 'https://schema.org',
+	'@type': 'Organization',
+	'@id': `${SITE_URL}/#organization`,
+	name: 'ROSS Events',
+	url: SITE_URL,
+	email: contact.email,
+	telephone: contact.phone.replace(/\s/g, ''),
+	description:
+		'Organizacja wydarzeń, technika sceniczna i koordynacja eventów w całej Polsce.',
+	areaServed: { '@type': 'Country', name: 'Polska' },
+	contactPoint: {
+		'@type': 'ContactPoint',
+		contactType: 'sales',
+		telephone: contact.phone.replace(/\s/g, ''),
+		email: contact.email,
+		areaServed: 'PL',
+		availableLanguage: 'pl',
+	},
+};
+
 export const footerDescription =
 	'ROSS Events — organizacja wydarzeń, technika sceniczna i koordynacja eventów w całej Polsce. Nagłośnienie, oświetlenie, sceny, ekrany LED, namioty i multimedia na koncerty, konferencje oraz imprezy firmowe.';
 
@@ -175,6 +204,7 @@ export const realizationsPage = {
 	categories: [
 		{
 			title: 'Koncerty i festiwale',
+			icon: 'music',
 			text: 'Nagłośnienie, oświetlenie, scena, multimedia i współpraca ekip podczas wydarzeń muzycznych.',
 		},
 		{

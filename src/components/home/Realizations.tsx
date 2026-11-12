@@ -1,4 +1,5 @@
 import { ChevronRight } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import Button from '../ui/Button';
 import { projects } from '@/utils/consts';
@@ -64,10 +65,15 @@ export default function ProjectArchive() {
 						<div
 							key={project.id}
 							className={`group relative overflow-hidden rounded-lg bg-zinc-900 cursor-pointer ${getItemClasses(index, homeProjects.length)}`}>
-							<div
-								className='absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105 md:grayscale group-hover:grayscale-0'
-								style={{ backgroundImage: `url('${project.src}')` }}
-							/>
+							<div className='absolute inset-0 transition-all duration-700 group-hover:scale-105 md:grayscale group-hover:grayscale-0'>
+								<Image
+									src={project.src}
+									alt=''
+									fill
+									sizes='(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw'
+									className='object-cover'
+								/>
+							</div>
 
 							{/* <div className='absolute inset-0 bg-black/50 group-hover:bg-black/20 transition-colors duration-500 flex flex-col justify-end p-6'>
 								<h3 className='text-white font-bold text-xl md:text-2xl uppercase tracking-wider translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300'>
